@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>VPS Manager • Security Squadron</title>
+  <meta name="description" content="VPS Manager Android — Infraestrutura, Firewall, OSINT e Agentes n8n ↔ Discord em tempo real">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='2'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10'/%3E%3Cpath d='m9 12 2 2 4-4'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Portfolio Demo Cinematic Intro & System Ignition Overlay -->
+  <div id="demoIntroOverlay" class="demo-intro-overlay">
+    <div class="demo-intro-card">
+      <div class="demo-intro-pill">
+        <span class="demo-pill-dot"></span>
+        <span>PORTFOLIO DEMO • ENTERPRISE SRE &amp; CYBER DEFENSE</span>
+      </div>
+
+      <div class="demo-intro-brand">
+        <div class="demo-shield-badge">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="demo-intro-title">VPS MANAGER</h1>
+          <p class="demo-intro-subtitle">Security Squadron • Native Web Edition</p>
+        </div>
+      </div>
+
+      <div class="demo-specs-grid">
+        <div class="demo-spec-item">
+          <span class="spec-label">ARQUITETURA</span>
+          <span class="spec-val">VisionOS Liquid Glass</span>
+        </div>
+        <div class="demo-spec-item">
+          <span class="spec-label">PERFORMANCE</span>
+          <span class="spec-val">37 WebGL Shaders (60 FPS)</span>
+        </div>
+        <div class="demo-spec-item">
+          <span class="spec-label">SRE &amp; SHIELD</span>
+          <span class="spec-val">4 Agentes n8n ↔ Discord</span>
+        </div>
+        <div class="demo-spec-item">
+          <span class="spec-label">HARDWARE VAULT</span>
+          <span class="spec-val">Samsung Knox Biometrics</span>
+        </div>
+      </div>
+
+      <div class="demo-progress-wrapper">
+        <div class="demo-progress-bar">
+          <div class="demo-progress-fill" id="demoIntroProgressFill"></div>
+        </div>
+        <div class="demo-progress-labels">
+          <span id="demoIntroStatusText">Inspecionando integridade do Kernel e Knox Keystore...</span>
+          <span id="demoIntroPercent">0%</span>
+        </div>
+      </div>
+
+      <div class="demo-intro-footer">
+        <button type="button" class="btn-demo-enter" id="btnEnterDemo">
+          <span>Explorar Demo Interativa</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Engine Layer (WebGL 37 Shaders & 5 Wallpaper Galleries Preserved) -->
+  <div id="bg-container">
+    <div class="bg-slide active" id="bg-slide-1"></div>
+    <div class="bg-slide" id="bg-slide-2"></div>
+    <div id="bg-webgl-container"></div>
+  </div>
+  <div id="bg-overlay"></div>
+
+  <!-- VisionOS Glass Viewport -->
+  <div class="vision-viewport">
+
+    <!-- Samsung Knox Security Biometric Lockscreen -->
+    <div class="login-lockscreen" id="loginLockscreen" style="display: none; opacity: 0; pointer-events: none;">
+      <div class="login-glass-card biometric-lock-card">
+        <div class="biometric-pulse-container" id="biometricTriggerBtn" role="button" tabindex="0" title="Autenticar com Digital Knox">
+          <div class="biometric-pulse-ring"></div>
+          <div class="biometric-pulse-ring pulse-delay"></div>
+          <div class="biometric-brand-icon">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="login-header-text">
+          <h1 class="login-title">VPS MANAGER</h1>
+          <p class="login-subtitle">Samsung Knox • Segurança Zero-Trust SSH & Cyber Shield</p>
+        </div>
+
+        <div id="loginErrorMsg" class="login-error-pill" style="display: none;"></div>
+
+        <div class="biometric-action-area">
+          <button type="button" class="btn-biometric-auth" id="biometricAuthBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+              <circle cx="12" cy="11" r="2.5"/>
+            </svg>
+            <span>Desbloquear com Biometria</span>
+          </button>
+        </div>
+
+        <div class="login-footer-security">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span>Knox Hardware Vault • Tailscale 100.64.0.0/10</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Liquid Glass Dock (Minimalist 4-View Navigation) -->
+    <aside class="floating-dock" aria-label="Navegação Principal">
+      <div class="dock-brand" id="brandLogoBtn" title="VPS Manager Shield">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+          <path d="m9 12 2 2 4-4"/>
+        </svg>
+      </div>
+
+      <nav class="dock-nav">
+        <button type="button" class="dock-item active" id="dockHomeBtn" data-view="home" title="Início">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </button>
+        <button type="button" class="dock-item" id="dockLogsBtn" data-view="logs" title="Logs do Sistema">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 17 10 11 4 5"/>
+            <line x1="12" y1="19" x2="20" y2="19"/>
+          </svg>
+        </button>
+        <button type="button" class="dock-item" id="dockIpsBtn" data-view="ips" title="IPs &amp; Ocorrências">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+            <circle cx="12" cy="11" r="2.5"/>
+          </svg>
+        </button>
+        <button type="button" class="dock-item" id="dockAgentsBtn" data-view="agents" title="Agentes IA">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="14" x="3" y="6" rx="3"/>
+            <path d="M12 2v4"/>
+            <circle cx="9" cy="13" r="1.5"/>
+            <circle cx="15" cy="13" r="1.5"/>
+          </svg>
+        </button>
+      </nav>
+
+      <div class="dock-footer">
+        <button type="button" class="dock-item" id="settingsDockBtn" title="Fundos, Shaders &amp; Conexões">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.9a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
+            <path d="m22 12.5-9.42 4.28a2 2 0 0 1-1.66 0L2 12.5"/>
+            <path d="m22 17.5-9.42 4.28a2 2 0 0 1-1.66 0L2 17.5"/>
+          </svg>
+        </button>
+        <button type="button" class="dock-item" id="lockDockBtn" title="Bloquear com Biometria Knox">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Liquid Glass Panel -->
+    <div class="vision-glass-panel">
+
+      <!-- Minimalist Header Bar -->
+      <header class="vision-header">
+        <div class="header-top-row">
+          <div style="display: flex; align-items: center; gap: 0.65rem;">
+            <div class="dock-brand" style="display: flex; width: 32px; height: 32px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <div>
+              <div style="font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; letter-spacing: 0.04em;">VPS MANAGER</div>
+              <div style="font-size: 0.7rem; color: var(--text-muted); line-height: 1;">vps-sentinel-demo</div>
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <div class="stats-badge-vision">
+              <span id="vpsStatusIndicator" class="status-live">● AO VIVO</span>
+              <span class="hide-xs" id="uptimeCounter"> • 62d</span>
+            </div>
+
+            <button type="button" class="btn-glass-pure btn-compact" id="forceSyncHeaderBtn" title="Sincronizar Discord, VPS e OSINT">
+              <svg class="sync-icon-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                <path d="M21 3v5h-5"/>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                <path d="M3 21v-5h5"/>
+              </svg>
+              <span>Sync</span>
+            </button>
+
+            <button type="button" class="btn-glass-pure btn-compact" id="activeShaderPill" title="Alterar Shader / Wallpaper">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.9a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/>
+                <path d="m22 12.5-9.42 4.28a2 2 0 0 1-1.66 0L2 12.5"/>
+              </svg>
+              <span id="currentShaderName">Strands</span>
+            </button>
+            <button type="button" class="btn-glass-pure btn-compact demo-badge-pill" id="demoPortfolioBtn" title="Portfolio Demo • Informações">
+              <span class="demo-sparkle">✨</span>
+              <span>DEMO</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Scrollable Main Content Area with 4 Dedicated Views -->
+      <main class="vision-content vision-content-scroll" id="mainContentArea">
+
+        <!-- ================================================================== -->
+        <!-- VIEW 1: INÍCIO (DASHBOARD & RESUMO OPERACIONAL)                    -->
+        <!-- ================================================================== -->
+        <div class="app-view active" id="viewHome">
+          
+          <!-- Hero Minimalist Host Card -->
+          <section class="hero-spotlight section-block" id="heroSpotlight">
+            <div class="hero-backdrop" id="heroBackdrop"></div>
+            <div class="hero-overlay"></div>
+
+            <div class="hero-info">
+              <div class="hero-badge" id="heroDomainBadge">vps-sentinel-demo • 100.64.0.42 • UPTIME 62D</div>
+              <h1 class="hero-title" id="heroTitle">AgencyX VPS Defense &amp; Security Squadron</h1>
+              <p class="hero-desc" id="heroDesc">Defesa de perímetro no Kernel Linux com ipset O(1), Fail2ban permanente e 4 Agentes de IA n8n ↔ Discord.</p>
+            </div>
+          </section>
+
+          <!-- Telemetry Grid -->
+          <section class="section-block" id="telemetrySection">
+            <div class="vps-grid">
+              <div class="vps-stat-card">
+                <div class="vps-stat-header">
+                  <span class="vps-stat-title">CPU (2 Cores)</span>
+                  <span class="vps-stat-icon">⚡</span>
+                </div>
+                <div class="vps-stat-value" id="valCpu">--%</div>
+                <div class="vps-stat-sub" id="subCpu">Load: --</div>
+                <div class="vps-progress-bar-bg">
+                  <div class="vps-progress-bar-fill" id="barCpu" style="width: 10%;"></div>
+                </div>
+              </div>
+
+              <div class="vps-stat-card">
+                <div class="vps-stat-header">
+                  <span class="vps-stat-title">Memória RAM</span>
+                  <span class="vps-stat-icon">💾</span>
+                </div>
+                <div class="vps-stat-value" id="valRam">-- / -- GB</div>
+                <div class="vps-stat-sub" id="subRam">Swap: --</div>
+                <div class="vps-progress-bar-bg">
+                  <div class="vps-progress-bar-fill" id="barRam" style="width: 48%;"></div>
+                </div>
+              </div>
+
+              <div class="vps-stat-card">
+                <div class="vps-stat-header">
+                  <span class="vps-stat-title">Disco NVMe</span>
+                  <span class="vps-stat-icon">💽</span>
+                </div>
+                <div class="vps-stat-value" id="valDisk">-- / -- GB</div>
+                <div class="vps-stat-sub" id="subDisk">Livre: -- GB</div>
+                <div class="vps-progress-bar-bg">
+                  <div class="vps-progress-bar-fill" id="barDisk" style="width: 39%;"></div>
+                </div>
+              </div>
+
+              <div class="vps-stat-card">
+                <div class="vps-stat-header">
+                  <span class="vps-stat-title">Kernel DROPs</span>
+                  <span class="vps-stat-icon">🛡️</span>
+                </div>
+                <div class="vps-stat-value" id="valThreats" style="color: #38bdf8;">--</div>
+                <div class="vps-stat-sub" id="subThreats">Fail2ban: -- • OSINT: --</div>
+                <div class="vps-progress-bar-bg">
+                  <div class="vps-progress-bar-fill" id="barThreats" style="width: 100%; background: linear-gradient(90deg, #10b981, #38bdf8);"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Kernel Firewall Hero Card (Minimalist 2-Button Action) -->
+          <section class="kernel-firewall-card" id="kernelFirewallCard">
+            <div class="fw-card-header">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+                <strong style="font-size: 1.05rem; color: #fff;">Kernel Firewall Permanente</strong>
+              </div>
+              <div class="fw-card-badges">
+                <span class="badge-mini" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">IPSET O(1)</span>
+                <span class="badge-mini" style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.4);">FAIL2BAN: BANTIME = -1</span>
+              </div>
+            </div>
+
+            <div>
+              <div class="fw-metric-big" id="homeFwBanCount">5.618 IPs</div>
+              <div class="fw-metric-sub">Bloqueio permanente ativo na camada do Kernel Linux. Zero overhead, filtragem em O(1) e supressão total do bombardeio de mensagens às 23h via Discord silencioso com anexo markdown.</div>
+            </div>
+
+            <div class="fw-card-actions">
+              <button type="button" class="btn-fw-primary" id="btnSendFullReport">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                <span>Gerar &amp; Enviar Relatório Completo</span>
+              </button>
+
+              <button type="button" class="btn-fw-secondary" id="btnTriggerMassReban">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span>Bloqueio em Massa Permanente</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Real-time Alert Banner -->
+          <section class="realtime-alert-box" id="homeRealtimeAlertBox">
+            <div class="alert-pulse-dot"></div>
+            <div class="realtime-alert-text" id="homeRealtimeAlertText">Monitorando em tempo real... 5.618 invasores neutralizados no ipset kernel.</div>
+          </section>
+
+          <!-- Docker Containers Section -->
+          <section class="security-hub-section section-block" id="dockerSection">
+            <div class="security-section-title">
+              <h2>
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                </svg>
+                Containers Docker
+              </h2>
+              <span class="badge-status-gray" id="dockerCounter">-- ativos</span>
+            </div>
+            <div class="containers-grid" id="containersGrid"></div>
+          </section>
+
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 2: LOGS DO SISTEMA & RELATÓRIOS (PAGE COMPLETA)               -->
+        <!-- ================================================================== -->
+        <div class="app-view hidden-view" id="viewLogs">
+          
+          <div class="page-title-bar">
+            <div>
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="4 17 10 11 4 5"/>
+                  <line x1="12" y1="19" x2="20" y2="19"/>
+                </svg>
+                Logs do Sistema &amp; Eventos
+              </h2>
+              <div class="page-subtitle">Histórico cronológico, eventos de segurança em tempo real e relatórios consolidados.</div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <button type="button" class="btn-glass-pure btn-compact" id="btnOpenReportsModal" title="Visualizar relatórios em Markdown">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <span>Relatórios (.md)</span>
+              </button>
+              <button type="button" class="btn-glass-pure btn-compact" id="btnRefreshLogs">
+                <span>↻ Atualizar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Controls Bar: Category Pills + Search -->
+          <div class="logs-controls-bar">
+            <div class="logs-filter-group" id="logsCategoryFilters">
+              <button type="button" class="logs-cat-pill active" data-cat="all">Todos</button>
+              <button type="button" class="logs-cat-pill" data-cat="FIREWALL">Firewall</button>
+              <button type="button" class="logs-cat-pill" data-cat="SENTINEL">Sentinel</button>
+              <button type="button" class="logs-cat-pill" data-cat="OSINT">Cyber OSINT</button>
+              <button type="button" class="logs-cat-pill" data-cat="SSH">SSH</button>
+            </div>
+
+            <div class="search-box-vision" style="flex: 1; max-width: 320px;">
+              <input type="text" class="search-input-vision" id="logsSearchInput" placeholder="Filtrar logs..." autocomplete="off">
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.74rem; color: var(--text-muted);">
+            <span id="logsTotalCountBadge">Carregando logs...</span>
+            <span>Fluxo contínuo sincronizado via Tailscale</span>
+          </div>
+
+          <!-- Full Logs Stream List -->
+          <div class="logs-feed-container" id="fullLogsList">
+            <div class="log-row-item INFO">
+              <span class="log-ts">--:--:--</span>
+              <span class="log-cat-badge">SYSTEM</span>
+              <span class="log-msg-text">Iniciando conexão com a API de logs Sentinel (:5059)...</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 3: IPS & OCORRÊNCIAS (PAGE COMPLETA DE DOSSIÊS)                -->
+        <!-- ================================================================== -->
+        <div class="app-view hidden-view" id="viewIps">
+
+          <div class="page-title-bar">
+            <div>
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                  <circle cx="12" cy="11" r="2.5"/>
+                </svg>
+                Endereços IP &amp; Ocorrências
+              </h2>
+              <div class="page-subtitle">Dossiê detalhado de cada IP interceptado: portas atacadas, payloads e bloqueio permanente.</div>
+            </div>
+          </div>
+
+          <!-- Top KPI Bar -->
+          <div class="ips-kpi-bar">
+            <div class="ips-kpi-card">
+              <strong id="valTotalIpsCount">4.661</strong>
+              <span>IPs Catalogados</span>
+            </div>
+            <div class="ips-kpi-card">
+              <strong id="valTotalPermBansCount" style="color: #f43f5e;">5.618</strong>
+              <span>Kernel Bans (O1)</span>
+            </div>
+            <div class="ips-kpi-card">
+              <strong id="valAvgThreatScore" style="color: #38bdf8;">98.4</strong>
+              <span>Score Médio</span>
+            </div>
+          </div>
+
+          <!-- Quick Manual Permanent Block Bar -->
+          <div class="quick-block-bar">
+            <input type="text" id="blockIpInput" class="mini-input" style="flex: 1;" placeholder="IP ou CIDR /24 para bloqueio permanente no ipset...">
+            <button type="button" class="btn-fw-primary" id="btnManualIpBlock" style="padding: 0.5rem 1rem; font-size: 0.78rem;">
+              <span>🔒 Bloquear Permanente</span>
+            </button>
+          </div>
+
+          <!-- Filter Pills & Search Input -->
+          <div class="ips-controls-bar">
+            <div class="logs-filter-group" id="ipsStatusFilters">
+              <button type="button" class="logs-cat-pill active" data-status="all">Todos</button>
+              <button type="button" class="logs-cat-pill" data-status="blocked">Bloqueados</button>
+              <button type="button" class="logs-cat-pill" data-status="high">Alta Ameaça (&gt;80)</button>
+            </div>
+
+            <div class="search-box-vision" style="flex: 1; max-width: 320px;">
+              <input type="text" class="search-input-vision" id="ipsSearchInput" placeholder="Buscar IP, ISP ou porta..." autocomplete="off">
+            </div>
+          </div>
+
+          <!-- IPs & Occurrences Feed -->
+          <div class="ips-feed-container" id="ipsOccurrencesList">
+            <div class="glass-subpanel">Carregando catálogo de IPs e ocorrências...</div>
+          </div>
+
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 4: AGENTES IA & DISCORD (PAGE COMPLETA)                       -->
+        <!-- ================================================================== -->
+        <div class="app-view hidden-view" id="viewAgents">
+
+          <div class="page-title-bar">
+            <div>
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="18" height="14" x="3" y="6" rx="3"/>
+                  <path d="M12 2v4"/>
+                  <circle cx="9" cy="13" r="1.5"/>
+                  <circle cx="15" cy="13" r="1.5"/>
+                </svg>
+                4 Agentes de Segurança • n8n ↔ Discord
+              </h2>
+              <div class="page-subtitle">Comunicação e automações com canais oficiais do Discord e n8n Agent Editor.</div>
+            </div>
+            <span class="badge-status-gray" id="securityHubCounter">4/4 AGENTES ATIVOS</span>
+          </div>
+
+          <div class="security-agents-grid" id="securityAgentsGrid">
+            <!-- Dynamically populated with real n8n IDs, Discord Channels & latest Discord messages -->
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal: Markdown Reports Viewer -->
+  <div class="modal-overlay" id="reportsModalOverlay" style="display: none;">
+    <div class="modal-glass-container agent-modal-box" style="max-width: 760px;">
+      <button type="button" class="modal-close" id="closeReportsModalBtn" title="Fechar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="settings-header">
+        <h2>Relatórios de Segurança • AgencyX</h2>
+      </div>
+      <p class="settings-subtitle">Relatórios consolidados enviados silenciosamente ao Discord com evidências forenses e bloqueios permanentes.</p>
+
+      <div class="reports-selector-bar" id="reportsListBar">
+        <!-- populated dynamically with available reports -->
+      </div>
+
+      <div class="reports-modal-body">
+        <div class="report-reader-view" id="reportReaderContent">
+          Selecione um relatório acima para visualizar o dossiê completo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal 1: Agent Details + Discord Channel Messages + Direct n8n Agent Chat -->
+  <div class="modal-overlay" id="agentDetailModalOverlay" style="display: none;">
+    <div class="modal-glass-container agent-modal-box">
+      <button type="button" class="modal-close" id="closeAgentModalBtn" title="Fechar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="modal-agent-header">
+        <div class="agent-icon-wrap" id="modalAgentIcon">🛡️</div>
+        <div style="min-width: 0; flex: 1;">
+          <h2 id="modalAgentTitle">Agente</h2>
+          <div id="modalAgentSubtitle" class="modal-agent-sub">Canal • n8n ID</div>
+        </div>
+      </div>
+
+      <!-- Modal Sub-tabs -->
+      <div class="settings-subtabs modal-tabs-bar">
+        <button type="button" class="modal-tab-btn active" data-agent-tab="discord">💬 Mensagens Discord</button>
+        <button type="button" class="modal-tab-btn" data-agent-tab="n8nchat">🤖 Chat n8n Agent</button>
+        <button type="button" class="modal-tab-btn" data-agent-tab="dossier">📋 Dossiê & Tools</button>
+      </div>
+
+      <!-- Tab: Discord Channel Feed -->
+      <div class="modal-tab-pane active" id="paneAgentDiscord">
+        <div class="discord-toolbar">
+          <span id="modalDiscordChannelTag" class="discord-channel-pill">#canal</span>
+          <button type="button" class="btn-mini-glass" id="btnRefreshChannelDiscord">↻ Atualizar Canal</button>
+        </div>
+        <div id="modalDiscordMessages" class="discord-feed-container"></div>
+        <div class="composer-row">
+          <input type="text" id="discordMessageInput" class="mini-input" placeholder="Enviar mensagem para o canal do Discord...">
+          <button type="button" class="btn-agent-action primary" id="btnSendDiscordMsg" style="flex: 0 0 auto; padding: 0 1rem;">Enviar</button>
+        </div>
+      </div>
+
+      <!-- Tab: Direct n8n Agent Interaction -->
+      <div class="modal-tab-pane" id="paneAgentN8nChat">
+        <div class="discord-toolbar">
+          <span id="modalN8nAgentTag" class="discord-channel-pill">n8n: --</span>
+          <span class="badge-mini">openai/combo/guardian-thinking</span>
+        </div>
+        <div id="modalN8nChatHistory" class="discord-feed-container"></div>
+        <div class="composer-row">
+          <input type="text" id="n8nAgentPromptInput" class="mini-input" placeholder="Perguntar ou ordenar ação ao agente n8n...">
+          <button type="button" class="btn-agent-action primary" id="btnSendN8nPrompt" style="flex: 0 0 auto; padding: 0 1rem;">Executar</button>
+        </div>
+      </div>
+
+      <!-- Tab: Agent Metadata, n8n Tools & Live Data -->
+      <div class="modal-tab-pane" id="paneAgentDossier">
+        <div id="modalAgentBody" class="agent-dossier-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Interactive SSH / System Exec Terminal -->
+  <div class="modal-overlay" id="terminalModalOverlay" style="display: none;">
+    <div class="modal-glass-container agent-modal-box">
+      <button type="button" class="modal-close" id="closeTerminalModalBtn" title="Fechar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="settings-header">
+        <h2>Console SSH Root • 100.64.0.42</h2>
+      </div>
+      <p class="settings-subtitle">Execução direta autenticada na API :5059 (`/api/vps/system/exec`).</p>
+
+      <div class="quick-cmd-chips">
+        <button type="button" class="btn-mini-glass cmd-chip" data-cmd="uptime && free -h && df -h /">uptime &amp; mem</button>
+        <button type="button" class="btn-mini-glass cmd-chip" data-cmd="docker ps --format 'table {{.Names}}\t{{.Status}}'">docker ps</button>
+        <button type="button" class="btn-mini-glass cmd-chip" data-cmd="fail2ban-client status sshd | head -n 12">fail2ban sshd</button>
+        <button type="button" class="btn-mini-glass cmd-chip" data-cmd="ss -tulnp | head -n 20">ss -tulnp</button>
+      </div>
+
+      <div id="sshModalOutput" class="vps-terminal-box ssh-output-box">Pronto. Digite um comando ou toque em um atalho acima.</div>
+
+      <div class="composer-row" style="margin-top: 0.75rem;">
+        <input type="text" id="sshCommandInput" class="mini-input" placeholder="Ex: systemctl status vps-sentinel --no-pager">
+        <button type="button" class="btn-agent-action primary" id="btnRunSshCommand" style="flex: 0 0 auto; padding: 0 1rem;">Rodar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Settings (37 WebGL Shaders, 5 Wallpaper Galleries, Native Bridge Config) -->
+  <div class="modal-overlay" id="settingsModalOverlay" style="display: none;">
+    <div class="modal-glass-container settings-modal">
+      <button type="button" class="modal-close" id="closeSettingsBtn" title="Fechar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="settings-header">
+        <h2>Aparência, Shaders & Conexões</h2>
+      </div>
+      <p class="settings-subtitle">37 Shaders WebGL, 5 Galerias em rotação e configuração de endpoints Discord / n8n / Tailscale.</p>
+
+      <div class="settings-subtabs">
+        <button type="button" class="settings-tab-btn active" data-bg-tab="shaders">Shaders WebGL (37)</button>
+        <button type="button" class="settings-tab-btn" data-bg-tab="wallpapers">Wallpapers (5)</button>
+        <button type="button" class="settings-tab-btn" data-bg-tab="connections">Conexões</button>
+      </div>
+
+      <div class="settings-tab-pane active" id="paneShaders">
+        <div class="shader-options-grid">
+          <button type="button" class="shader-card-option active" data-bg-type="shader" data-bg="strands"><div class="shader-info"><strong>Strands</strong><span>Ondas de luz e refração</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="plasmawave"><div class="shader-info"><strong>PlasmaWave</strong><span>Ondas de plasma fluido</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="softaurora"><div class="shader-info"><strong>SoftAurora</strong><span>Aurora suave reativa</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="balatro"><div class="shader-info"><strong>Balatro</strong><span>Espiral hipnótica minimalista</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="siderays"><div class="shader-info"><strong>SideRays</strong><span>Feixes volumétricos</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="ferrofluid"><div class="shader-info"><strong>FerroFluid</strong><span>Fluido magnético metálico</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="moltenmetal"><div class="shader-info"><strong>MoltenMetal</strong><span>Metal líquido cromado</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="topography"><div class="shader-info"><strong>Topography</strong><span>Linhas topográficas</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="lighttunnel"><div class="shader-info"><strong>LightTunnel</strong><span>Túnel de fibra óptica</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="acidsquares"><div class="shader-info"><strong>AcidSquares</strong><span>Geometria fractal</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="webthreads"><div class="shader-info"><strong>WebThreads</strong><span>Teias de energia</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="dither"><div class="shader-info"><strong>Dither Wave</strong><span>Ondas pontilhadas</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="darkveil"><div class="shader-info"><strong>DarkVeil</strong><span>Véu analógico escuro</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="particles"><div class="shader-info"><strong>Particles</strong><span>Partículas 3D em órbita</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="ghostfibers"><div class="shader-info"><strong>GhostFibers</strong><span>Fibras holográficas</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="beams"><div class="shader-info"><strong>Beams</strong><span>Feixes volumétricos 3D</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="floatinglines"><div class="shader-info"><strong>FloatingLines</strong><span>Linhas sinusoidais 3D</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="silk"><div class="shader-info"><strong>Silk</strong><span>Seda acetinada fluida</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="radar"><div class="shader-info"><strong>Radar</strong><span>Varredura tática circular</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="ripplegrid"><div class="shader-info"><strong>RippleGrid</strong><span>Grade reativa com ondulação</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="pixelblast"><div class="shader-info"><strong>PixelBlast</strong><span>Malha de pixels explosiva</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="magicrings"><div class="shader-info"><strong>MagicRings</strong><span>Anéis luminosos concêntricos</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="gridscan"><div class="shader-info"><strong>GridScan</strong><span>Varredura de matriz tática</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="liquidchrome"><div class="shader-info"><strong>LiquidChrome</strong><span>Mercúrio e reflexão</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="linewaves"><div class="shader-info"><strong>LineWaves</strong><span>Ondulações paramétricas</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="faultyterminal"><div class="shader-info"><strong>FaultyTerminal</strong><span>CRT e fósforo verde</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="morphslider"><div class="shader-info"><strong>MorphSlider</strong><span>Transição de morfologia</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="antigravity"><div class="shader-info"><strong>Antigravity</strong><span>Partículas quânticas 3D</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="aurora"><div class="shader-info"><strong>Aurora Borealis</strong><span>Cores atmosféricas vivas</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="letterglitch"><div class="shader-info"><strong>LetterGlitch</strong><span>Matriz cyberpunk</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="plasma"><div class="shader-info"><strong>Classic Plasma</strong><span>Gradiente harmônico</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="liquidether"><div class="shader-info"><strong>LiquidEther</strong><span>Fluido etéreo 3D</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="orb"><div class="shader-info"><strong>Cosmic Orb</strong><span>Esfera de energia luminosa</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="prism"><div class="shader-info"><strong>Prism Glass</strong><span>Dispersão cromática óptica</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="prismaticburst"><div class="shader-info"><strong>Prismatic Burst</strong><span>Feixes policromáticos</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="lightning"><div class="shader-info"><strong>Electric Discharge</strong><span>Relâmpagos e plasma ativo</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="shader" data-bg="evileye"><div class="shader-info"><strong>EvilEye / Core</strong><span>Núcleo energético</span></div></button>
+        </div>
+      </div>
+
+      <div class="settings-tab-pane" id="paneWallpapers">
+        <div class="shader-options-grid">
+          <button type="button" class="shader-card-option" data-bg-type="wallpaper" data-bg="gym images"><div class="shader-info"><strong>Gym &amp; Muscle</strong><span>Galeria estética (rotativa)</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="wallpaper" data-bg="motivacional"><div class="shader-info"><strong>Motivacional</strong><span>Foco cinematográfico (rotativa)</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="wallpaper" data-bg="red"><div class="shader-info"><strong>Red Tone</strong><span>Tons escuros e contraste</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="wallpaper" data-bg="gen x soft club"><div class="shader-info"><strong>Gen X Soft Club</strong><span>Estética vintage futurista</span></div></button>
+          <button type="button" class="shader-card-option" data-bg-type="wallpaper" data-bg="flowers"><div class="shader-info"><strong>Flowers &amp; Dark Nature</strong><span>Flores escuras orgânicas</span></div></button>
+        </div>
+      </div>
+
+      <div class="settings-tab-pane" id="paneConnections">
+        <div id="bridgeStatusBox" class="bridge-status-card">Carregando estado da ponte nativa...</div>
+        <div class="liquid-input-group">
+          <label for="cfgSentinelUrl">URL Sentinel API (:5059)</label>
+          <div class="input-glass-wrap"><input type="text" id="cfgSentinelUrl" placeholder="http://100.64.0.42:5059"></div>
+        </div>
+        <div class="liquid-input-group">
+          <label for="cfgOsintUrl">URL Cyber OSINT API (:5060)</label>
+          <div class="input-glass-wrap"><input type="text" id="cfgOsintUrl" placeholder="http://100.64.0.42:5060"></div>
+        </div>
+        <div class="liquid-input-group">
+          <label for="cfgN8nUrl">URL n8n New Agents Engine</label>
+          <div class="input-glass-wrap"><input type="text" id="cfgN8nUrl" placeholder="https://sentinel-node.tailscale-demo.net:5678"></div>
+        </div>
+        <div class="liquid-input-group" style="flex-direction: row; align-items: center; justify-content: space-between; margin-top: 0.75rem;">
+          <label for="cfgBioOnLaunch" style="margin: 0;">Exigir Biometria Knox ao Iniciar</label>
+          <input type="checkbox" id="cfgBioOnLaunch" style="width: 20px; height: 20px; accent-color: #38bdf8;">
+        </div>
+        <button type="button" class="btn-agent-action primary" id="btnSaveConnections" style="width: 100%; margin-top: 0.5rem;">
+          <span>Salvar Preferências &amp; Testar Conexão</span>
+        </button>
+      </div>
+
+      <div class="settings-footer">
+        <button type="button" class="btn-glass-pure btn-compact" id="randomShaderBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
+            <path d="m18 2 4 4-4 4"/>
+          </svg>
+          <span>Aleatório</span>
+        </button>
+        <button type="button" class="btn-glass-solid btn-compact" id="btnApplyAndCloseBg">
+          <span>Concluir</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Portfolio Demo Information & Interactive Controls -->
+  <div class="modal-overlay" id="demoPortfolioModalOverlay" style="display: none;">
+    <div class="modal-glass-container" style="max-width: 650px;">
+      <button type="button" class="modal-close" id="closeDemoPortfolioModalBtn" title="Fechar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div class="settings-header">
+        <h2>Portfolio Demo • VPS Manager</h2>
+      </div>
+      <p class="settings-subtitle">Demonstração oficial interativa e sanitizada de software de cibersegurança e automação SRE.</p>
+
+      <div class="demo-info-grid">
+        <div class="demo-info-card">
+          <h4>🖥️ Sentinel &amp; SRE</h4>
+          <p>Supervisão telemétrica de host Oracle ARM64, contêineres Docker, rotinas git e inspeção de recursos em tempo real com latência zero.</p>
+        </div>
+        <div class="demo-info-card">
+          <h4>🛡️ Guardian &amp; Kernel</h4>
+          <p>Firewall permanente no Kernel Linux com ipset O(1), supressão de ataques e jails de Fail2ban com tempo perpétuo.</p>
+        </div>
+        <div class="demo-info-card">
+          <h4>🕵️ Cyber OSINT</h4>
+          <p>Enriquecimento de dados de invasores, correlação Shodan, mapeamento de CVEs e catálogo global de nós atacantes.</p>
+        </div>
+        <div class="demo-info-card">
+          <h4>⚖️ CERT &amp; RFC 2142</h4>
+          <p>Autos formais de infração cibernética despachados automaticamente para CERTs nacionais (CISA, CERT.br, NCSC) e provedores.</p>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.8rem;">
+        <button type="button" class="btn-agent-action primary" id="btnReplayIntro">
+          <span>🔄 Repetir Animação de Entrada</span>
+        </button>
+        <button type="button" class="btn-agent-action" id="btnQuickTestBiometric">
+          <span>🔒 Testar Biometria Knox</span>
+        </button>
+        <button type="button" class="btn-agent-action" id="btnQuickOpenTerminal">
+          <span>💻 Abrir Terminal SSH</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compact Floating Toast -->
+  <div id="vpsToast" class="vps-toast" style="display: none;"></div>
+
+  <!-- Core Scripts (Three.js + WebGL OGL + App Engine) -->
+  <script src="./js/vendor/three.min.js"></script>
+  <script type="module" src="./js/webgl-backgrounds.js"></script>
+  <script src="./js/web-demo-mock.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

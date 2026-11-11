@@ -1,0 +1,11 @@
+{
+  "appId": "com.mateuscelestino.vpsmanager",
+  "appName": "VPS Manager",
+  "webDir": "www",
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": true
+    }
+  }
+}
+

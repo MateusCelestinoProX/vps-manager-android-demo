@@ -1,0 +1,16 @@
+.DS_Store
+Thumbs.db
+node_modules/
+.env.local
+.env.*.local
+*.log
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+.gradle/
+.vercel/
+graphify-out/
+www/
+*.apk
+android/app/local-secrets.properties

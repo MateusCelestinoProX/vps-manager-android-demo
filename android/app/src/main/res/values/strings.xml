@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">VPS Manager</string>
+    <string name="title_activity_main">VPS Manager</string>
+    <string name="package_name">com.mateuscelestino.vpsmanager</string>
+    <string name="custom_url_scheme">com.mateuscelestino.vpsmanager</string>
+</resources>

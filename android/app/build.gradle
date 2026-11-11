@@ -1,0 +1,84 @@
+apply plugin: 'com.android.application'
+
+def localSecrets = new Properties()
+def localSecretsFile = file('local-secrets.properties')
+if (localSecretsFile.exists()) {
+    localSecretsFile.withInputStream { localSecrets.load(it) }
+}
+def escapeBuildConfig = { String val ->
+    return '"' + (val ?: '').replace('\\', '\\\\').replace('"', '\\"') + '"'
+}
+
+android {
+    namespace = "com.mateuscelestino.vpsmanager"
+    compileSdk = rootProject.ext.compileSdkVersion
+    buildFeatures {
+        buildConfig = true
+    }
+    defaultConfig {
+        applicationId "com.mateuscelestino.vpsmanager"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 2
+        versionName "2.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "DISCORD_BOT_TOKEN", escapeBuildConfig(localSecrets.getProperty("DISCORD_BOT_TOKEN", ""))
+        buildConfigField "String", "N8N_BASE_URL", escapeBuildConfig(localSecrets.getProperty("N8N_BASE_URL", "https://sentinel-node.tailscale-demo.net:5678"))
+        buildConfigField "String", "N8N_MCP_TOKEN", escapeBuildConfig(localSecrets.getProperty("N8N_MCP_TOKEN", ""))
+        buildConfigField "String", "N8N_AUTH_TOKEN", escapeBuildConfig(localSecrets.getProperty("N8N_AUTH_TOKEN", ""))
+        buildConfigField "String", "VPS_SENTINEL_URL", escapeBuildConfig(localSecrets.getProperty("VPS_SENTINEL_URL", "http://100.64.0.42:5059"))
+        buildConfigField "String", "VPS_OSINT_URL", escapeBuildConfig(localSecrets.getProperty("VPS_OSINT_URL", "http://100.64.0.42:5060"))
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation "androidx.biometric:biometric:1.1.0"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}
