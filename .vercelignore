@@ -1,0 +1,9 @@
+android/
+graphify-out/
+scripts/
+www/
+.git/
+node_modules/
+package-lock.json
+capacitor.config.json
+*.apk

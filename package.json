@@ -1,17 +1,19 @@
 {
-  "name": "vps-manager-android",
+  "name": "vps-manager-android-demo",
   "version": "1.0.0",
-  "description": "VPS Manager Android - Native Glassmorphic Infrastructure Management App",
+  "description": "VPS Manager Android Demo - Native Web Portfolio Edition with Sanitized Mock Telemetry",
   "main": "app.js",
   "scripts": {
-    "sync": "npx cap sync android",
-    "build": "npx cap copy android && cd android && ./gradlew assembleDebug"
+    "dev": "npx serve . -p 8080",
+    "build": "echo 'VPS Manager Native Web Demo ready'",
+    "android:sync": "npx cap sync android",
+    "android:build": "npx cap copy android && cd android && ./gradlew assembleDebug"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MateusCelestinoProX/vps-manager-android.git"
+    "url": "git+https://github.com/MateusCelestinoProX/vps-manager-android-demo.git"
   },
-  "keywords": ["vps", "security", "android", "capacitor"],
+  "keywords": ["vps", "security", "web-demo", "portfolio", "glassmorphism", "webgl"],
   "author": "Mateus Celestino <202405039459@alunos.estacio.br>",
   "license": "ISC",
   "dependencies": {
